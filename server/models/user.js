@@ -1,0 +1,148 @@
+const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
+const validator = require('validator')
+
+
+const userSchema = new mongoose.Schema({
+    // photo: {
+    //     type: String
+    // },
+    firstName: {
+        type: String,
+        required:[true, 'Please add a first name']
+    },
+    lastName: {
+        type: String,
+        required:[true, 'Please add a last name']
+    },
+    username: {
+        type: String,
+        required: [true, 'Please add a username'],
+        unique: true
+    },
+    email: {
+        type: String,
+        required: [true, 'Please add an email'],
+        unique: true
+    },
+    password: {
+        type: String,
+        required: [true, 'Please add a password']
+    },
+    photo: {
+        type: String
+    },
+    
+}, {timestamps: true}
+)
+
+
+//STATIC METHOD - using Mongoose static function (e.g UserModel.signup()) to register or login user
+
+//Static signup method
+userSchema.statics.signup = async function(firstName, lastName, username, email, password, photo) {
+
+    //validation
+    if (!firstName || !lastName || !username || !email || !password || !photo) {
+        throw Error('All fields must be filled!')
+    }
+    if (!validator.matches(firstName || lastName, '^[a-zA-Z_.-]*$')) {
+        throw Error('Invalid name')
+    }
+    if (!validator.matches(username, '^[a-zA-Z0-9_.-]*$')) {
+        throw Error('Invalid username')
+    }
+    if (!validator.isEmail(email)) {
+        throw Error('Invalid email address')
+    }
+    if (!validator.isStrongPassword(password)) {
+        throw Error('Weak password') 
+    }
+
+    //check if user's email or username exists and hash password
+    const emailExists = await this.findOne({ email }) //'this' refers to 'User' model
+    const usernameExists = await this.findOne({ username })
+
+    if (emailExists || usernameExists) {
+        throw Error('Email or username already in use!')
+    }
+
+    const salt = await bcrypt.genSalt(10)
+    const hash = await bcrypt.hash(password, salt)
+
+    const user = await this.create({
+        firstName,
+        lastName,
+        username,
+        email,
+        password: hash,
+        photo
+    })
+
+    return user
+}
+
+
+//Static login method
+userSchema.statics.login = async function(email, password) {
+    
+    //validation
+    if (!email || !password) {
+        throw Error('All fields must be filled')
+    }
+
+    //check if user exists and compare password with that in the database
+    const user = await this.findOne({ email })
+
+    if (!user) {
+        throw Error('Incorrect email')
+    }
+
+    const match = await bcrypt.compare(password, user.password)
+
+    if (!match) {
+        throw Error('Incorrect password')
+    }
+
+    return user
+
+}
+
+
+// //Static signup method
+// userSchema.statics.update = async function(firstName, lastName, username, email, password) {
+
+//     //validation
+//     if (!firstName || !lastName || !username || !email || !password) {
+//         throw Error('All fields must be filled!')
+//     }
+//     if (!validator.matches(firstName || lastName, '^[a-zA-Z_.-]*$')) {
+//         throw Error('Invalid name')
+//     }
+//     if (!validator.matches(username, '^[a-zA-Z0-9_.-]*$')) {
+//         throw Error('Invalid username')
+//     }
+//     if (!validator.isEmail(email)) {
+//         throw Error('Invalid email address')
+//     }
+//     if (!validator.isStrongPassword(password)) {
+//         throw Error('Weak password') 
+//     }
+
+
+//     const salt = await bcrypt.genSalt(10)
+//     const hash = await bcrypt.hash(password, salt)
+
+//     const body = {
+//         ...req.body,
+//         password: hash
+//     }
+
+//     const user = await this.findByIdAndUpdate({_id: req.params.id}, body, {new: true})
+
+//     return user
+// }
+/////////// END
+
+
+module.exports  = mongoose.model('User', userSchema)
