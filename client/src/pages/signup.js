@@ -284,14 +284,12 @@ const Signup = () => {
         const formData  = new FormData();
         for(const prop in form) {
             formData.append(prop, form[prop]);
-            //formData.append(prop, prop !== photo ? form[prop] : JSON.stringify(form[prop]))
         }
-        //formData.append('image', photo)
   
         console.log(form, 'this is the form')
         e.preventDefault()
   
-        await signup(form)
+        await signup(formData)
     }
   
   

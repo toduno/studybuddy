@@ -19,8 +19,8 @@ export const useSignup = () => {
 
         const response = await fetch('http://localhost:7001/signup', {
             method: 'POST',
-            headers: {'Content-Type': 'multipart/form-data'},
-            body: JSON.stringify(formData)
+            // headers: {'Content-Type': 'multipart/form-data'},
+            body: formData
         })
 
         const json = await response.json()

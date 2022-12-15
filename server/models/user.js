@@ -43,7 +43,7 @@ const userSchema = new mongoose.Schema({
 userSchema.statics.signup = async function(firstName, lastName, username, email, password, photo) {
 
     //validation
-    if (!firstName || !lastName || !username || !email || !password || !photo) {
+    if (!firstName || !lastName || !username || !email || !password) {
         throw Error('All fields must be filled!')
     }
     if (!validator.matches(firstName || lastName, '^[a-zA-Z_.-]*$')) {
