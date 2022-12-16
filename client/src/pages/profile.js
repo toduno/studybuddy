@@ -13,13 +13,13 @@ const User = (props) => (
    <div className='md:w-[95%] m-auto'>
         <div className='mx-auto bg-white max-w-[97%] md:w-[80%] p-3 md:p-4 rounded-md shadow-md w-auto leading-7 flex flex-col gap-y-3 md:gap-y-5 overflow-hidden'>
             <div>
-                <h3 className='text-orange-800 text-xl md:text-2xl font-bold md:mb-1'>Profile Info</h3>
+                <h3 className='text-orange-800 text-xl md:text-2xl font-bold pb-1 md:mb-1'>Profile Info</h3>
                 <div className='border-[1px]'></div>
             </div>
 
-            <div className='px-3 py-5 md:py-10  mx-2 flex flex-col md:flex-row gap-y-4 md:justify-evenly '>
+            <div className='py-5 md:py-10  mx-2 flex flex-col md:flex-row gap-y-4 md:justify-evenly md:items-center '>
                 <img src={`http://localhost:7001/uploads/${props.record.photo}`} alt='student'
-                        className='rounded-full h-[25%] w-[25%]'  />
+                        className='rounded-full h-36 w-36 md:h-60 md:w-60'  />
                     
                 <ul className='leading-8 md:leading-10'>
                     <li>First name: <span className={bold}>{props.record.firstName}</span></li>

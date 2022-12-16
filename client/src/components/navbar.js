@@ -52,9 +52,9 @@ const Navbar =() => {
                                         ? 
                                         <ul className='flex flex-col gap-y-5 md:flex-row md:gap-x-7 md:items-center'>
                                             {/* <NavLink to='/dashboard' className={navItemStyle}>Dashboard</NavLink> */}
-                                            <NavLink to={'/u/' + user._id} className={`flex md:justify-end md:items-center ${navItemStyle}`}>
+                                            <NavLink to={'/u/' + user._id} className={`flex md:items-center ${navItemStyle}`}>
                                                 <img src={`http://localhost:7001/uploads/${user.photo}`} alt={user} 
-                                                 className='rounded-full h-[5%] w-[5%] md:h-[4%] md:w-[4%] mr-2'   />
+                                                 className='rounded-full h-5 w-5 md:h-7 md:w-7 mr-2'   />
                                                 <span>{user.email}</span>
                                             </NavLink>
                                             <Create />

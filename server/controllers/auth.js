@@ -46,7 +46,7 @@ const signupUser =  async(req, res) => {
     else {
         password = await bcrypt.hash(password, 12)
     
-        const dbUser = new User({
+        const user = new User({
             firstName,
             lastName,
             username,
@@ -54,17 +54,18 @@ const signupUser =  async(req, res) => {
             password,
         })
         if(req.file) {
-            dbUser.photo = req.file.filename
+            user.photo = req.file.filename
         }
 
         try{
-            const saveNewUser = await dbUser.save()
-            const token = createToken(dbUser._id)
+            const saveNewUser = await user.save()
+            const token = createToken(user._id)
 
-                    const id = dbUser._id //or const {_id} = user  //gets this from the user database (using the .login() user variable we used
-                    //when getting user details from the db or the user here) to send back too to the client
-            
-                    res.status(200).json({email, token, id}) 
+            const {_id, username, photo} = user  //gets this from the user database (using the .login() user variable we used
+            //when getting user details from the db or the user here) to send back too to the client
+
+            res.status(200).json({email, token, _id, username, photo}) 
+
         } catch(err) {
             res.status(400).json('Error: ' + err)
         }
