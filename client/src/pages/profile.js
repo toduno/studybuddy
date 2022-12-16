@@ -11,19 +11,31 @@ const bold = 'font-semibold ml-1'
 
 const User = (props) => (
    <div className='md:w-[95%] m-auto'>
-        <div className='mx-auto bg-white max-w-[97%] md:w-[80%] p-3 md:p-4 rounded-sm shadow-md w-auto leading-7 flex flex-col gap-y-3 md:gap-y-5 overflow-hidden'>
-            <h3 className='text-orange-800 text-xl md:text-2xl font-bold md:mb-1'>Profile Info</h3>
-            <div className='border-[1px]'></div>
-
-            <div>First name: <span className={bold}>{props.record.firstName}</span></div>
-            <div>Last name: <span className={bold}>{props.record.lastName}</span></div>
-            <div>Username: <span className={bold}>{props.record.username}</span></div>
-            <div>Email: <span className={bold}>{props.record.email}</span></div>
-            <div className='mr-1'>Password: <input type='password' value={props.record.password} disabled className='bg-white'/></div>
-            <div className='flex justify-between mt-2 md:mt-3 mb-2'>
-                <EditProfile recordId={props.record._id} />
-                <ConfirmDeleteAccount userRecord={props} />
+        <div className='mx-auto bg-white max-w-[97%] md:w-[80%] p-3 md:p-4 rounded-md shadow-md w-auto leading-7 flex flex-col gap-y-3 md:gap-y-5 overflow-hidden'>
+            <div>
+                <h3 className='text-orange-800 text-xl md:text-2xl font-bold md:mb-1'>Profile Info</h3>
+                <div className='border-[1px]'></div>
             </div>
+
+            <div className='px-3 py-5 md:py-10  mx-2 flex flex-col md:flex-row gap-y-4 md:justify-evenly '>
+                <img src={`http://localhost:7001/uploads/${props.record.photo}`} alt='student'
+                        className='rounded-full h-[25%] w-[25%]'  />
+                    
+                <ul className='leading-8 md:leading-10'>
+                    <li>First name: <span className={bold}>{props.record.firstName}</span></li>
+                    <li>Last name: <span className={bold}>{props.record.lastName}</span></li>
+                    <li>Username: <span className={bold}>{props.record.username}</span></li>
+                    <li>Email: <span className={bold}>{props.record.email}</span></li>
+                    <li className='mr-1'>Password: <input type='password' value={props.record.password} disabled className='bg-white'/></li>
+                </ul>
+            </div>
+
+            <ul>
+                <li className='flex justify-between mb-2'>
+                        <EditProfile recordId={props.record._id} />
+                        <ConfirmDeleteAccount userRecord={props} />
+                </li>
+            </ul>
         </div>
     </div>
 )
@@ -40,7 +52,7 @@ const Profile = () => {
         async function getRecord() {
 
             //get the response
-            const response = await fetch(`http://localhost:7001/u/${user.id}`, {
+            const response = await fetch(`http://localhost:7001/u/${user._id}`, {
                 headers: {
                     "Authorization": `Bearer ${user.token}`//protected route
                 },
@@ -59,8 +71,7 @@ const Profile = () => {
         }
 
         return
-    }, [userRecord.length, user]) //the useEffect hook function is going to be dependent on the records length (i.e the no of items 
-    //the records has that will be gotten from the database)
+    }, [userRecord.length, user]) 
     
 
     return (

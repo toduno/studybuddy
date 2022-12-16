@@ -44,22 +44,6 @@ const updateUser = async(req, res) => {
     }
 }
 
-////using user model static method
-// const updateUser = async(req, res) => {
-//     console.log(req.body)
-//     const { firstName, lastName, username, email, password } = req.body
-
-//     try {
-//         const user = await User.update(firstName, lastName, username, email, password) //using the .update()
-//         //function we created in the model schema
-
-//         res.status(200).json(user) 
-        
-//     } catch (error) {
-//         res.status(400).json({error: error.message})
-//     }
-// } 
-
 
 const deleteUser = async(req, res) => {
     try{

@@ -50,10 +50,11 @@ const Navbar =() => {
                             <ul className='items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0'> 
                                     {user
                                         ? 
-                                        <ul className='flex flex-col gap-y-4 md:flex-row md:gap-x-7 md:items-center'>
+                                        <ul className='flex flex-col gap-y-5 md:flex-row md:gap-x-7 md:items-center'>
                                             {/* <NavLink to='/dashboard' className={navItemStyle}>Dashboard</NavLink> */}
-                                            <NavLink to={'/u/' + user.id} className={`flex ${navItemStyle}`}>
-                                                {/* <img src={`http://localhost:7000/uploads/${userImage}`} alt={user} /> */}
+                                            <NavLink to={'/u/' + user._id} className={`flex md:justify-end md:items-center ${navItemStyle}`}>
+                                                <img src={`http://localhost:7001/uploads/${user.photo}`} alt={user} 
+                                                 className='rounded-full h-[5%] w-[5%] md:h-[4%] md:w-[4%] mr-2'   />
                                                 <span>{user.email}</span>
                                             </NavLink>
                                             <Create />

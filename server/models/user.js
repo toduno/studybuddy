@@ -30,7 +30,8 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Please add a password']
     },
     photo: {
-        type: String
+        type: String,
+        required: true
     },
     
 }, {timestamps: true}
@@ -67,7 +68,7 @@ userSchema.statics.signup = async function(firstName, lastName, username, email,
         throw Error('Email or username already in use!')
     }
 
-    const salt = await bcrypt.genSalt(10)
+    const salt = await bcrypt.genSalt(10)   
     const hash = await bcrypt.hash(password, salt)
 
     const user = await this.create({
@@ -78,6 +79,9 @@ userSchema.statics.signup = async function(firstName, lastName, username, email,
         password: hash,
         photo
     })
+    // if(req.file) {
+    //     user.photo = req.file.filename
+    // }
 
     return user
 }
@@ -107,41 +111,6 @@ userSchema.statics.login = async function(email, password) {
     return user
 
 }
-
-
-// //Static signup method
-// userSchema.statics.update = async function(firstName, lastName, username, email, password) {
-
-//     //validation
-//     if (!firstName || !lastName || !username || !email || !password) {
-//         throw Error('All fields must be filled!')
-//     }
-//     if (!validator.matches(firstName || lastName, '^[a-zA-Z_.-]*$')) {
-//         throw Error('Invalid name')
-//     }
-//     if (!validator.matches(username, '^[a-zA-Z0-9_.-]*$')) {
-//         throw Error('Invalid username')
-//     }
-//     if (!validator.isEmail(email)) {
-//         throw Error('Invalid email address')
-//     }
-//     if (!validator.isStrongPassword(password)) {
-//         throw Error('Weak password') 
-//     }
-
-
-//     const salt = await bcrypt.genSalt(10)
-//     const hash = await bcrypt.hash(password, salt)
-
-//     const body = {
-//         ...req.body,
-//         password: hash
-//     }
-
-//     const user = await this.findByIdAndUpdate({_id: req.params.id}, body, {new: true})
-
-//     return user
-// }
 /////////// END
 
 

@@ -1,36 +1,75 @@
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 
 
 //reusable function that signs the token for the user signup and login
 const createToken = (_id) => {
-   return jwt.sign({_id}, process.env.SECRET, {  expiresIn: '7d' })
+   return jwt.sign({_id}, process.env.SECRET, {  expiresIn: '10d' })
 }
 
 
-//@desc Register a user
-//@route POST /signup
-//@access Public
-const signupUser = async(req, res) => {
-    const { firstName, lastName, username, email, password, photo } = req.body
+// //@desc Register a user
+// //@route POST /signup
+// //@access Public
+// const signupUser = async(req, res) => {
+//     const { firstName, lastName, username, email, password } = req.body
+//     const { photo } = req.file.filename
 
-    try {
-        const user = await User.signup(firstName, lastName, username, email, password, photo) //executig the .signup()
-        //function we created in the model schema. Note we're passing the result of the function to this
-        //user variable 
+//     try {
+//         const user = await User.signup(firstName, lastName, username, email, password, photo) //executig the .signup()
+//         //function we created in the model schema. Note we're passing the result of the function to this
+//         //user variable 
 
-        //create token
-        const token = createToken(user._id)
+//         //create token
+//         const token = createToken(user._id)
 
-        const id = user._id //or const {_id} = user  //gets this from the user database (using the .login() user variable we used
-        //when getting user details from the db or the user here) to send back too to the client
+//         const id = user._id //or const {_id} = user  //gets this from the user database (using the .login() user variable we used
+//         //when getting user details from the db or the user here) to send back too to the client
 
-        res.status(200).json({email, token, id}) //sends the email of the user created, and the token 
-        //to the browser
-    } catch (error) {
-        res.status(400).json({error: error.message})
+//         res.status(200).json({email, token, id}) //sends the email of the user created, and the token 
+//         //to the browser
+//     } catch (error) {
+//         res.status(400).json({error: error.message})
+//     }
+// } 
+
+const signupUser =  async(req, res) => {
+    let { firstName, lastName, username, email, password } = req.body
+
+    const takenUsername = await User.findOne({username})
+    const takenEmail = await User.findOne({email})
+
+    if (takenUsername || takenEmail) {
+        res.json({message: 'Username or email already exist!'})
+    } 
+    else {
+        password = await bcrypt.hash(password, 12)
+    
+        const dbUser = new User({
+            firstName,
+            lastName,
+            username,
+            email,
+            password,
+        })
+        if(req.file) {
+            dbUser.photo = req.file.filename
+        }
+
+        try{
+            const saveNewUser = await dbUser.save()
+            const token = createToken(dbUser._id)
+
+                    const id = dbUser._id //or const {_id} = user  //gets this from the user database (using the .login() user variable we used
+                    //when getting user details from the db or the user here) to send back too to the client
+            
+                    res.status(200).json({email, token, id}) 
+        } catch(err) {
+            res.status(400).json('Error: ' + err)
+        }
     }
-} 
+}
 
 
 //@desc Authenticate a user

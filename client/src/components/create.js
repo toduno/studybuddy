@@ -18,8 +18,7 @@ export default function Create() {
         subject: '',
         topic: '',
         duration: '',
-        notes: '',
-        completed: false
+        notes: ''
     })
 
     //gets the user token to protect route (i.e server route) from unauthenticated user

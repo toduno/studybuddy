@@ -264,7 +264,7 @@ const Signup = () => {
         photo: '',
     })
   
-    const {firstName, lastName, username, email, password, confirmPassword, photo} = form
+    const {firstName, lastName, username, email, password, confirmPassword} = form
   
     const { signup, error, isLoading } = useSignup() //isLoading will be used to disable the button if
     //isLoading is true so the request currently going won't send another one right away

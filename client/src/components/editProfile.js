@@ -37,7 +37,7 @@ const EditProfile = ({recordId}) => {
             // //database is stringified). Note we can use recordId instead though
 
             //get the response
-            const response = await fetch(`http://localhost:7001/u/${user.id}`, {
+            const response = await fetch(`http://localhost:7001/u/${user._id}`, {
                 headers: {
                     "Authorization": `Bearer ${user.token}`//protected route
                 },

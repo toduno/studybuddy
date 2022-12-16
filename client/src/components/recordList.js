@@ -9,47 +9,37 @@ import Edit from './edit'
 import Create from './create';
 
 
-const Completed = ({completed}) => {
-    const [checked, setChecked] = useState(completed)
+const Record = (props) => {
+    const [checked, setChecked] = useState(props.record.completed)
 
-
-    async function onSubmit(e) {
+    
+    async function onChange(e) {
         e.preventDefault()
+
+        setChecked(!checked)
         console.log(checked)
 
-        const response = await fetch(`http://localhost:7001/record/add/`, {
-            method: 'POST',
-            body: JSON.stringify(checked),
+        const response = await fetch(`http://localhost:7001/record/update/${props.record.id}`, {
+            method: 'PUT',
+            body: JSON.parse(checked),
             headers: {
                 "Content-Type": "application/json",
             },
         })
 
-        const json = await response.json() //json is the response data or object we get back
+        const json = await response.json()
 
         if (!response.ok) {
             console.log(json.error)
-        }
-        
+        } 
     }
-
-    return (
-        <>
-            <input type='checkbox' className='form-check-input' value={checked} onChange={(e) => setChecked(e.target.checked
-                )} onSubmit={onSubmit} />
-        </>
-    )
-}   
-
-const Record = (props) => {
-    
 
 
     return (
         <div className='bg-white md:w-[30%] py-2 px-3 rounded-md shadow-md w-full leading-6 md:leading-7'>
             <div className='mb-2 flex justify-between'>
                 <div className='underline'>{props.record.type}</div>
-                <Completed completed={props.record.completed} />
+                <input type='checkbox' className='form-check-input' checked={checked} onChange={onChange} />
             </div>
             <div className='text-lg md:text-xl font-semibold text-orange-700'>{props.record.subject}</div>
             <div className='font-semibold mb-1 md:my-1'>{props.record.topic}</div>
