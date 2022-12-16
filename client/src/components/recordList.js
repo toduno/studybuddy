@@ -16,14 +16,17 @@ const Record = (props) => {
     async function onChange(e) {
         e.preventDefault()
 
-        setChecked(!checked)
-        console.log(checked)
+        let updateChecked = !checked
+        setChecked(updateChecked)
 
-        const response = await fetch(`http://localhost:7001/record/update/${props.record.id}`, {
+        console.log(updateChecked)
+
+        const response = await fetch(`http://localhost:7001/record/update/${props.record._id}`, {
             method: 'PUT',
-            body: JSON.parse(checked),
+            body: JSON.stringify({completed: updateChecked}) ,
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": `Bearer ${props.user.token}`
             },
         })
 
@@ -39,7 +42,7 @@ const Record = (props) => {
         <div className='bg-white md:w-[30%] py-2 px-3 rounded-md shadow-md w-full leading-6 md:leading-7'>
             <div className='mb-2 flex justify-between'>
                 <div className='underline'>{props.record.type}</div>
-                <input type='checkbox' className='form-check-input' checked={checked} onChange={onChange} />
+                <input type='checkbox' className='form-check-input' checked={checked} onChange={(e) => onChange(e)} />
             </div>
             <div className='text-lg md:text-xl font-semibold text-orange-700'>{props.record.subject}</div>
             <div className='font-semibold mb-1 md:my-1'>{props.record.topic}</div>
@@ -117,7 +120,7 @@ export default function RecordList() {
     const recordList = () => {
         return records.map(record => {
             return (
-                <Record record={record}  deleteRecord={() => deleteRecord(record._id)}  key={record._id} />
+                <Record record={record}  deleteRecord={() => deleteRecord(record._id)}  key={record._id} user={user} />
             )
         })
     }
