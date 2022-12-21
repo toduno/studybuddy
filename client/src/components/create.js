@@ -1,15 +1,9 @@
-//To serve as a creating component for our records - using this component, users can create a new record. The component 
-//will submit a create command to our server
-
-
 import { useState } from 'react';
 import { useAuthContext } from '../hooks/useAuthContext';
-//import { useNavigate } from 'react-router'; //useNavigate will help us navigate automatically without having to route 
-//manually
 
 
 export default function Create() {
-    const inputStyle = 'text-black font-normal mt-1 bg-gray-100 hover:bg-blue-100 py-1 px-2 md:py-2 block w-full rounded-sm'
+    const inputStyle = 'text-black font-normal mt-1 bg-gray-100 hover:bg-blue-100 px-2 py-1 block w-full rounded-sm'
 
     const [error, setError] = useState(null)
     const [showModal, setShowModal] = useState(false);
@@ -21,22 +15,19 @@ export default function Create() {
         notes: ''
     })
 
-    //gets the user token to protect route (i.e server route) from unauthenticated user
+    //gets access to the user token to protect route (i.e server route) from unauthenticated user
     const { user } = useAuthContext()
-
-    // //creating navigation (i.e accessing the useNavigate object)
-    // const navigate = useNavigate()
 
 
     //methods
-    //methods that will update the state properties after creating new record
+    //updates the state properties after creating new record
     const updateForm = (value) => {
         return setForm(prev => {
             return {...prev, ...value} //using spread to get previous and new or set state/value
         })
     }
 
-    //method that will handle form submission when creating new record
+    //handles form submission when creating a new record
     async function onSubmit(e) {
         e.preventDefault()
 
@@ -45,17 +36,14 @@ export default function Create() {
             return
         }
 
-        //when a post request is sent to the 'create' url, we'll add a new record to the database
+        //when a post request is sent to the 'create' url, add a new record to the database
         const newPerson = {...form}
 
-        //note that you can use axios to skip setting the header manually because axios automatically sets it for us
-        //and then you can use a middleware in your server.js file to stringify the form data to json when stored in the 
-        //database rather than setting all these here below using fetch 
        const response = await fetch('http://localhost:7001/record/add', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${user.token}` //protected route
+                "Authorization": `Bearer ${user.token}` //for protected route
             },
             body: JSON.stringify(newPerson)
         })
@@ -76,16 +64,10 @@ export default function Create() {
             notes: '',
         })
 
-        // //navigate back to default or home page 
-        // navigate('/')
         window.location.reload()
     }
 
 
-    //render or display the form to create record
-    //N.B: Pls note that we're not using props here to dynamically pass data because there is no parent component  
-    //e.g App component to pass the props from down here since the data is directly within this component so we're just 
-    //getting this data staright up from here
     return (
         <div>
             <button onClick={() => setShowModal(true)} className=' hover:text-orange-400'>
@@ -95,7 +77,7 @@ export default function Create() {
             {showModal ? (
                 <>
                     <div className='fixed inset-0 z-10 overflow-y-auto '>
-                        <div onClick={() =>setShowModal(false)} className='fixed inset-0 w-full h-full bg-black opacity-40'></div>
+                        <div onClick={() =>setShowModal(false)} className='fixed inset-0 w-full h-full bg-black opacity-50'></div>
                         
                         <div className='flex justify-center items-center min-h-screen'>
                             <div className='relative w-full max-w-sm md:max-w-md mx-auto '>
@@ -107,7 +89,7 @@ export default function Create() {
                                             <p className='font-normal text-gray-500 mt-3 mb-2 md:mb-4'>Please fill in this form to create a new study plan!</p>
                                         </div>
 
-                                        <form onSubmit={onSubmit} encType='multipart/form-data' className='w-full flex flex-col gap-y-3 md:gap-y-2'>
+                                        <form onSubmit={onSubmit} className='w-full flex flex-col gap-y-3 md:gap-y-2'>
                                             <div>
                                                 <label htmlFor='type'>Type</label>
                                                 <input type='text' id='type' value={form.type} onChange={(e) => updateForm({type: e.target.value})} 

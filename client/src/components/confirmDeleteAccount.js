@@ -1,6 +1,4 @@
-
 import { useState } from 'react';
-
 
 import { useAuthContext } from '../hooks/useAuthContext';
 import { useLogout } from '../hooks/useLogout';
@@ -22,7 +20,7 @@ const ConfirmDeleteAccount = ({userRecord}) => {
         await fetch(`http://localhost:7001/u/delete/${id}`, {
             method: "DELETE",
             headers: {
-                "Authorization": `Bearer ${user.token}`//for protected route
+                "Authorization": `Bearer ${user.token}` //for protected route
             },
         })
 

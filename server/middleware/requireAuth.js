@@ -28,7 +28,7 @@ const requireAuth = async (req, res, next) => {
 
     //c. verify the token (with that in the .env) to make sure it hasn't been tampered with (for the user to be authorized)
     try {
-        const {_id} = jwt.verify(token, process.env.secret) //grab the _id from the verified token (i.e the payload)
+        const {_id} = jwt.verify(token, process.env.SECRET) //grab the _id from the verified token (i.e the payload)
 
         req.user = await User.findById({_id}) //use the _id from the payload to try and find this user (with the _id) 
         //in the database and assign to req.user.

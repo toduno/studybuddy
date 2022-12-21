@@ -1,14 +1,13 @@
-//To create a navigation bar that will link us to the required components 
-
-
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+
 import { FaBars }  from 'react-icons/fa';
 import { FaTimes }  from 'react-icons/fa';
 
 import Create from './create'
 import { useLogout } from '../hooks/useLogout';
 import { useAuthContext } from '../hooks/useAuthContext';
+
 
 const Navbar =() => {
     const navItemStyle = 'hover:text-orange-400 active:text-orange-600'
@@ -54,7 +53,7 @@ const Navbar =() => {
                                             {/* <NavLink to='/dashboard' className={navItemStyle}>Dashboard</NavLink> */}
                                             <NavLink to={'/u/' + user._id} className={`flex md:items-center ${navItemStyle}`}>
                                                 <img src={`http://localhost:7001/uploads/${user.photo}`} alt={user} 
-                                                 className='rounded-full h-5 w-5 md:h-7 md:w-7 mr-2'   />
+                                                 className='rounded-full h-5 w-5 md:h-7 md:w-7 mr-1 hover:border-2 hover:border-orange-500'   />
                                                 <span>{user.email}</span>
                                             </NavLink>
                                             <Create />

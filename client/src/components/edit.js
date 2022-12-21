@@ -1,16 +1,10 @@
-//To serve as an editing component for our records - it will use a similar layout to the 'create' component and will
-//eventually submit an update command to our server
-
-
 import { useState, useEffect } from 'react';
-//import { useParams, useNavigate } from 'react-router';
-
 import { FaEdit } from 'react-icons/fa'
 import { useAuthContext } from '../hooks/useAuthContext';
 
 
 export default function Edit({recordId}) {
-    const inputStyle = 'text-black font-normal mt-1 bg-gray-100 hover:bg-blue-100 py-1 px-2 md:py-2 block w-full rounded-sm'
+    const inputStyle = 'text-black font-normal mt-1 bg-gray-100 hover:bg-blue-100 px-2 py-1 block w-full rounded-sm'
 
     const [error, setError] = useState(null)
     const [showModal, setShowModal] = useState(false);
@@ -22,26 +16,17 @@ export default function Edit({recordId}) {
         notes: ''
     })
 
-    //getsthe user token to protect route (i.e server route) from unauthenticated user
+    //gets access to the user token to protect route (i.e server route) from unauthenticated user
     const { user } = useAuthContext()
 
-    // //creating params (i.e accessing the useParams object)
-    // const params = useParams()
 
-    // //creating navigation (i.e accessing the useNavigate object)
-    // const navigate = useNavigate()
-
-    //creating a method for an http request to get data that will be updated - by id (that will be stored in the state 
-    //object record property) on DOM rendering
+    //gets data that will be updated - by id (stored in the state object record property) on DOM rendering
     useEffect(() => {
         async function fetchData() {
-            // const id = params.id.toString()  //getting the request id as a string (since the data stored in the 
-            // //database is stringified). Note we can use recordId instead though
-
             //get the response
             const response = await fetch(`http://localhost:7001/record/${recordId}`, {
                 headers: {
-                    "Authorization": `Bearer ${user.token}`//protected route
+                    "Authorization": `Bearer ${user.token}` //for protected route
                 },
             })
 
@@ -50,15 +35,13 @@ export default function Edit({recordId}) {
                 return
             }
 
-            //get the response data (in json format)
+            //get the response data or json object
             const record = await response.json()
             if(!record) {
                 window.alert(`An error has occurred: ${response.statusText}`)
-                // //navigate back to default or home page 
-                // navigate('/')
-                window.location.reload()
 
-                
+                window.location.reload()
+     
                 return
             }
 
@@ -67,8 +50,7 @@ export default function Edit({recordId}) {
         fetchData()
         return
         
-    }, [user, recordId]) //the useEffect hook function is going to be dependent on the recorId (to access params id for the request)
-    //and user object from useAuthContext hook
+    }, [user, recordId]) 
 
 
     const updateForm = (value) => {
@@ -77,7 +59,7 @@ export default function Edit({recordId}) {
         })
     }
 
-    //method that will handle form submission when updating record
+    //handles form submission when updating record
     async function onSubmit(e) {
         e.preventDefault()
 
@@ -86,7 +68,7 @@ export default function Edit({recordId}) {
             return
         }
 
-        //when a post request is sent to the 'update (by id)' url, we'll update the record in the database
+        //when a post request is sent to the 'update (by id)' url, updates the record in the database
         const editStudyRecord = {
             ...form
         }
@@ -96,7 +78,7 @@ export default function Edit({recordId}) {
             body: JSON.stringify(editStudyRecord),
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${user.token}`//protected route
+                "Authorization": `Bearer ${user.token}`//for protected route
             },
         })
 
@@ -106,9 +88,7 @@ export default function Edit({recordId}) {
             setError(json.error)
         }
         
-        ////navigate back to default or home page (which is the form page)
-        //navigate('/')  
-        window.location.reload() //you can't navigate to and fro since it's not a route but a modal
+        window.location.reload() //you can't navigate to and fro since it's not a route but a modal that's why using this
     }
 
 
@@ -122,7 +102,7 @@ export default function Edit({recordId}) {
             {showModal ? (
                 <>
                     <div className='fixed inset-0 z-10 overflow-y-auto'>
-                        <div onClick={() =>setShowModal(false)} className='fixed inset-0 w-full h-full bg-black opacity-40'></div>
+                        <div onClick={() =>setShowModal(false)} className='fixed inset-0 w-full h-full bg-black opacity-50'></div>
                         
                         <div className='flex justify-center items-center min-h-screen'>
                             <div className='relative w-full max-w-sm md:max-w-md mx-auto '>

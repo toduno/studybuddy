@@ -10,6 +10,7 @@ const corsOptions = {
     optionsSuccessStatus: 200
 }
 
+
 const port = process.env.PORT || 7001
 
 //express app

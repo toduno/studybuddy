@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom'
 import { useSignup } from '../hooks/useSignup';
@@ -254,6 +253,8 @@ import { useSignup } from '../hooks/useSignup';
 
 
 const Signup = () => {
+    const inputStyle = 'mt-1 bg-gray-100 hover:bg-blue-100 px-2 py-1 block w-full rounded-sm'
+
     const [form, setForm] = useState({
         firstName: '',
         lastName: '',
@@ -313,38 +314,38 @@ const Signup = () => {
                                         <div className='w-full'>                           
                                             <label htmlFor='fname'>First Name</label>
                                             <input placeholder='Enter your first name' type='text' id='fname' value={firstName} onChange={(e) => updateForm({firstName: e.target.value})} 
-                                                className='mt-1 bg-gray-100 hover:bg-blue-100 py-1 px-2 md:py-2 w-full block rounded'/>
+                                                className={inputStyle} />
                                         </div>
   
                                         <div className='w-full'>
                                             <label htmlFor='lname'>Last Name</label>
                                             <input placeholder='Enter your surname' type='text' id='lname' value={lastName} onChange={(e) => updateForm({lastName:e.target.value})} 
-                                                className='mt-1 bg-gray-100 hover:bg-blue-100 py-1 px-2 md:py-2 block w-full rounded-sm'/>
+                                                className={inputStyle} />
                                         </div>
                                     </div>
   
                                     <div>
                                         <label htmlFor='username'>Username</label>
                                         <input placeholder='ex: johnny' type='text' id='username' value={username} onChange={(e) => updateForm({username:e.target.value})} 
-                                            className='mt-1 bg-gray-100 hover:bg-blue-100 py-1 px-2 md:py-2 block w-full rounded-sm'/>
+                                            className={inputStyle} />
                                     </div>
   
                                     <div>
                                         <label htmlFor='email'>Email Address</label>
                                         <input placeholder='ex: email@address.com' type='email' id='email' value={email} onChange={(e) => updateForm({email: e.target.value})} 
-                                            className='mt-1 bg-gray-100 hover:bg-blue-100 py-1 px-2 md:py-2 block w-full rounded-sm'/>
+                                            className={inputStyle} />
                                     </div>
   
                                     <div>
                                         <label htmlFor='password'>Password</label>
                                         <input placeholder='*****' type='password' id='password' value={password} onChange={(e) => updateForm({password: e.target.value})} 
-                                            className='mt-1 bg-gray-100 hover:bg-blue-100 py-1 px-2 md:py-2 block w-full rounded-sm'/>
+                                            className={inputStyle} />
                                     </div>
   
                                     <div>
                                         <label htmlFor='confirmPassword'>Confirm Password</label>
                                         <input placeholder='*****' type='password' id='confirmPassword' value={confirmPassword} onChange={(e) => updateForm({confirmPassword: e.target.value})} 
-                                            className='mt-1 bg-gray-100 hover:bg-blue-100 py-1 px-2 md:py-2 block w-full rounded-sm'/>
+                                            className={inputStyle} />
                                     </div>
   
                                     <div>

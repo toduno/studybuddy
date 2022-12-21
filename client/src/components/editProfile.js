@@ -1,16 +1,9 @@
-//To serve as an editing component for our records - it will use a similar layout to the 'create' component and will
-//eventually submit an update command to our server
-
-
-import React, { useState, useEffect } from 'react';
-//import { useParams, useNavigate } from 'react-router';
-
-//import { FaEdit } from 'react-icons/fa'
+import { useState, useEffect } from 'react';
 import { useAuthContext } from '../hooks/useAuthContext';
 
 
 const EditProfile = ({recordId}) => {
-    const inputStyle = 'text-black font-normal mt-1 bg-gray-100 hover:bg-blue-100 py-1 px-2 md:py-2 block w-full rounded-sm'
+    const inputStyle = 'text-black font-normal mt-1 bg-gray-100 hover:bg-blue-100 px-2 py-1 block w-full rounded-sm'
 
     const [error, setError] = useState(null)
     const [showModal, setShowModal] = useState(false);
@@ -25,21 +18,17 @@ const EditProfile = ({recordId}) => {
 
     const {firstName, lastName, username, email, password} = form
 
-    //getsthe user token to protect route (i.e server route) from unauthenticated user
+    //gets access to the user token to protect route (i.e server route) from unauthenticated user
     const { user } = useAuthContext()
 
 
-    //creating a method for an http request to get data that will be updated - by id (that will be stored in the state 
-    //object record property) on DOM rendering
+    //gets data that will be updated - by id (stored in the state object record property) on DOM rendering
     useEffect(() => {
         async function fetchData() {
-            // const id = params.id.toString()  //getting the request id as a string (since the data stored in the 
-            // //database is stringified). Note we can use recordId instead though
-
             //get the response
             const response = await fetch(`http://localhost:7001/u/${user._id}`, {
                 headers: {
-                    "Authorization": `Bearer ${user.token}`//protected route
+                    "Authorization": `Bearer ${user.token}`//for protected route
                 },
             })
 
@@ -48,7 +37,7 @@ const EditProfile = ({recordId}) => {
                 return
             }
 
-            //get the response data (in json format)
+            //get the response data or json object
             const record = await response.json()
             if(!record) {
                 window.alert(`An error has occurred: ${response.statusText}`)
@@ -62,8 +51,7 @@ const EditProfile = ({recordId}) => {
         fetchData()
         return
         
-    }, [user]) //the useEffect hook function is going to be dependent on the recorId (to access params id for the request)
-    //and user object from useAuthContext hook
+    }, [user])
 
 
     const updateForm = (value) => {
@@ -93,7 +81,7 @@ const EditProfile = ({recordId}) => {
             return
         }
 
-        //when a post request is sent to the 'update (by id)' url, we'll update the record in the database
+        //when a post request is sent to the 'update (by id)' url, update the record in the database
         const editUser = {
             ...form
         }
@@ -103,7 +91,7 @@ const EditProfile = ({recordId}) => {
             body: JSON.stringify(editUser),
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${user.token}`//protected route
+                "Authorization": `Bearer ${user.token}`//for protected route
             },
         })
 
@@ -113,15 +101,12 @@ const EditProfile = ({recordId}) => {
             setError(json.error)
         }
         
-        ////navigate back to default or home page (which is the form page)
-        //navigate('/')  
-        window.location.reload() //you can't navigate to and fro since it's not a route but a modal
+        window.location.reload() //you can't navigate to and fro since it's not a route but a modal that's why using this
 
         console.log(editUser)
     }
 
 
-    
     return (
         <div>
             <button onClick={() => setShowModal(true)} className='md:mt-2 font-semibold bg-blue-700 hover:bg-blue-600 px-7 md:px-10 py-1 text-white rounded-sm'>
@@ -131,7 +116,7 @@ const EditProfile = ({recordId}) => {
             {showModal ? (
                 <>
                     <div className='fixed inset-0 z-10 overflow-y-auto'>
-                        <div onClick={() =>setShowModal(false)} className='fixed inset-0 w-full h-full bg-black opacity-40'></div>
+                        <div onClick={() =>setShowModal(false)} className='fixed inset-0 w-full h-full bg-black opacity-50'></div>
                         
                         <div className='flex justify-center items-center min-h-screen'>
                             <div className='relative w-full max-w-sm md:max-w-md mx-auto '>
@@ -184,10 +169,11 @@ const EditProfile = ({recordId}) => {
 
                                             <div className='flex justify-between mt-2 md:mt-auto'>
                                                 <div>
-                                                    <input type='submit' value="Save" className='md:mt-2 font-semibold bg-blue-700 hover:bg-blue-600 px-8 md:px-11 py-1 text-white' />
+                                                    <input type='submit' value="Save" className='md:mt-2 font-semibold bg-blue-700 hover:bg-blue-600 px-8 md:px-11 md:
+                                                    py-1 text-white' />
                                                 </div>
                                                 <div>
-                                                    <button className='md:mt-2 font-semibold bg-orange-600 hover:bg-orange-500 px-7 md:px-10 py-1 text-white'
+                                                    <button className='md:mt-2 font-semibold bg-orange-600 hover:bg-orange-500 px-7 md:px-10 md:py-1 text-white'
                                                         onClick={() => setShowModal(false)}>
                                                         Cancel
                                                     </button>

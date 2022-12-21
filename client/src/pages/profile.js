@@ -44,7 +44,7 @@ const User = (props) => (
 const Profile = () => {
     const [userRecord, setUserRecord] = useState([])
 
-    //gets the user token to protect route (i.e server route) from unauthenticated user
+    //gets access to the user token to protect route (i.e server route) from unauthenticated user
     const { user } = useAuthContext()
 
 
@@ -54,12 +54,12 @@ const Profile = () => {
             //get the response
             const response = await fetch(`http://localhost:7001/u/${user._id}`, {
                 headers: {
-                    "Authorization": `Bearer ${user.token}`//protected route
+                    "Authorization": `Bearer ${user.token}`//for protected route
                 },
             })
             if(!response.ok) return window.alert(`An error has occurred: ${response.statusText}`)
 
-            //get the response data (in json format)
+            //get the response data or json object
             const record = await response.json()
            
             //set the records state with the response data
