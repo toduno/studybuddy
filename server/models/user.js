@@ -94,6 +94,9 @@ userSchema.statics.login = async function(email, password) {
     if (!email || !password) {
         throw Error('All fields must be filled')
     }
+    if (!validator.isEmail(email)) {
+        throw Error('Invalid email address')
+    }
 
     //check if user exists and compare password with that in the database
     const user = await this.findOne({ email })

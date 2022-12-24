@@ -146,7 +146,7 @@ export default function Edit({recordId}) {
                                                 </textarea>
                                             </div>
                                         
-                                            <div className='flex justify-between mt-2 md:mt-auto'>
+                                            <div className={error? 'flex justify-between my-2' : 'flex justify-between mt-2'}>
                                                 <div>
                                                     <input type='submit' value="Edit study" className='md:mt-2 font-semibold bg-blue-700 hover:bg-blue-600 px-4 md:px-7 py-1 text-white' />
                                                 </div>
@@ -158,7 +158,7 @@ export default function Edit({recordId}) {
                                                 </div>
                                             </div>
 
-                                            {error && <div className='rounded-sm text-semibold py-1 px-2 border-[1px] border-red-500 text-red-700'>{error}</div>}
+                                            {error && <div className='rounded-md py-1 px-2 border-[1px] border-red-500 text-red-700'>{error}</div>}
                                         </form>
                                     </div> 
                                 </div>

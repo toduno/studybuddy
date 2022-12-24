@@ -1,3 +1,5 @@
+//User's password forgot and reset with Nodemailer and Google OAuth2
+
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;

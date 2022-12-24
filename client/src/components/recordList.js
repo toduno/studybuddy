@@ -150,7 +150,7 @@ export default function RecordList() {
                     <h3 className='text-xl md:text-2xl font-semibold mb-2 md:mb-3 '>Welcome <span className='pl-1 text-white'>{user.username},</span></h3> 
                     <div className='md:text-lg flex md:justify-center md:items-center'>
                         <p>You have <span className='text-orange-900 font-bold'>{records.length}</span> {records.length > 1 ? 'plans' : 'plan'} created.</p>
-                        <p className='flex ml-1 gap-x-1'> Click to <span className='text-orange-900 font-semibold'><Create /></span>cards.</p>
+                        <div className='flex ml-1 gap-x-1'> Click to <span className='text-orange-900 font-semibold'><Create /></span>cards.</div>
                     </div>
                 </div>
             }

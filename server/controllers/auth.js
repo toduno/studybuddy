@@ -1,8 +1,8 @@
 const User = require('../models/user')
-const sendEmail = require('../utils/sendEmail')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-
+const validator = require('validator')
+const sendEmail = require('../utils/sendEmail')
 
 //reusable function that signs the token for the user signup and login
 const createToken = (_id) => {
@@ -10,66 +10,59 @@ const createToken = (_id) => {
 }
 
 
-// //@desc Register a user
-// //@route POST /signup
-// //@access Public
-// const signupUser = async(req, res) => {
-//     const { firstName, lastName, username, email, password } = req.body
-//     const { photo } = req.file.filename
-
-//     try {
-//         const user = await User.signup(firstName, lastName, username, email, password, photo) //executig the .signup()
-//         //function we created in the model schema. Note we're passing the result of the function to this
-//         //user variable 
-
-//         //create token
-//         const token = createToken(user._id)
-
-//         const id = user._id //or const {_id} = user  //gets all thes from the user database (using the .login() static method user variable 
-            //used when getting user details from the db or the user here) to also send back to the client
-
-//         res.status(200).json({email, token, id}) //sends the email of the user created, and the token 
-//         //to the browser
-//     } catch (error) {
-//         res.status(400).json({error: error.message})
-//     }
-// } 
-
-const signupUser =  async(req, res) => {
+const signupUser =  async(req, res, next) => {
     let { firstName, lastName, username, email, password } = req.body
 
-    const takenUsername = await User.findOne({username})
-    const takenEmail = await User.findOne({email})
-
-    if (takenUsername || takenEmail) {
-        res.json({message: 'Username or email already exist!'})
-    } 
-    else {
-        password = await bcrypt.hash(password, 12)
-    
-        const user = new User({
-            firstName,
-            lastName,
-            username,
-            email,
-            password
-        })
-        if(req.file) {
-            user.photo = req.file.filename
+    try {
+        //validation
+        if (!firstName || !lastName || !username || !email || !password) {
+            throw Error('All fields must be filled!')
+        }
+        if (!validator.matches(firstName || lastName, '^[a-zA-Z_.-]*$')) {
+            throw Error('Invalid name')
+        }
+        if (!validator.matches(username, '^[a-zA-Z0-9_.-]*$')) {
+            throw Error('Invalid username')
+        }
+        if (!validator.isEmail(email)) {
+            throw Error('Invalid email address')
+        }
+        if (!validator.isStrongPassword(password)) {
+            throw Error('Weak password') 
         }
 
-        try{
-            const saveNewUser = await user.save()
-            const token = createToken(user._id)
+        //check if user exists and create new
+        const takenUsername = await User.findOne({username})
+        const takenEmail = await User.findOne({email})
 
-            const {_id, username, photo} = user  //gets all thes from the user database (using the .login() static method user variable 
-            //used when getting user details from the db or the user here) to also send back to the client
+        if (takenUsername || takenEmail) {
+            res.json({message: 'Username or email already exist!'})
+        } 
+        else {
+            password = await bcrypt.hash(password, 12)
+        
+            const user = new User({
+                firstName,
+                lastName,
+                username,
+                email,
+                password
+            })
+            if(req.file) {
+                user.photo = req.file.filename
+            }
+
+        
+            const saveNewUser = await user.save()
+            const token = createToken(user._id)  //to authenticate user
+
+            const {_id, photo} = user //gets these from the user database to send back to the client
 
             res.status(200).json({email, token, _id, username, photo}) 
+        } 
 
-        } catch(err) {
-            res.status(400).json('Error: ' + err)
-        }
+    } catch(error) {
+        res.status(400).json({error: error.message})
     }
 }
 
@@ -81,21 +74,23 @@ const loginUser = async(req, res) => {
    const { email, password } = req.body
 
    try {
-    const user = await User.login(email, password) //executes the .login() mongoose static method 
+        const user = await User.login(email, password) //executes the .login() mongoose static method 
 
-    //create token
-    const token = createToken(user._id)
+        //create token
+        const token = createToken(user._id)
 
-    const { _id, username, photo } = user
-    
-    res.status(200).json({email, token, _id, username, photo})
+        const { _id, username, photo } = user //gets these from the user database (using the .login() static method user variable 
+        //used when getting user details from the db or the user here) to also send back to the client
+        
+        res.status(200).json({email, token, _id, username, photo})
+
     } catch (error) {
         res.status(400).json({error: error.message})
     }
 }
 
 
-//@desc Authenticate a user
+//@desc Reset a user Password
 //@route POST /forgotPassword
 //@access Public 
 const forgotPassword = async(req, res) => {
@@ -108,7 +103,7 @@ const forgotPassword = async(req, res) => {
      //create token
      const token = createToken(_id) //token will be used to authenticate the user when resetting the password
 
-     const link = `http://localhost:7001/resetPassword/${_id}/${token}`
+     const link = `http://localhost:3000/resetPassword/${_id}/${token}`
      await sendEmail(email, 'Password Reset', link)
      console.log(link)
 
@@ -121,30 +116,34 @@ const forgotPassword = async(req, res) => {
  }
 
 
-//@desc Authenticate a user
-//@route GET /resetPassword
+//@desc Reset a User Password
+//@route GET /resetPassword/:id
 //@access Public
  const getResetPassword = async(req, res) => { 
-    const {id, token} = req.params
-    console.log(req.params)
+    const {id} = req.params
     
+   try {
+    //check if user exists
     const user = await User.findById(req.params.id)
     if (!user) {
         throw Error('User does not exist!')
     }
 
-    try {
-        if (token === process.env.SECRET ) res.status(200).send('Verified!')
-    } catch (error) {
-        res.status(400).send('Not verified!')
-    }
+    //create token
+    const token = createToken(id) //send the token to the :token in req.params of /resetPassword/:id url
+    // POST request on submit
 
-    res.status(200).json('Done!')
+    res.status(200).json({token})
+
+   } catch (error) {
+        res.status(400).json({error: error.message})
+        console.log(error)
+   }  
 }
 
 
-//@desc Authenticate a user
-//@route PATCH /resetPassword
+//@desc Reset a User Password
+//@route PATCH /resetPassword/:id/:token
 //@access Public
 const resetPassword = async(req, res) => {
     console.log(req.body)
@@ -155,13 +154,22 @@ const resetPassword = async(req, res) => {
     const hash = await bcrypt.hash(password, salt)
 
     try{
+        //validation
+        if (!password) {
+            throw Error('All fields must be filled')
+        }
+        if (!validator.isStrongPassword(password)) {
+            throw Error('Weak password') 
+        }
+
+        //check if user exists and update
         const body = {
             ...req.body,
             password: hash
         }
         const token = req.params
 
-        if (!token) return res.status(400).send('Invalid or expired link!')
+        if (!token) return res.status(400).send('Not verified!')
 
         const updateUser = await User.findByIdAndUpdate({_id: req.params.id}, body, {new: true}) 
         if (!updateUser) {
@@ -177,10 +185,45 @@ const resetPassword = async(req, res) => {
 }
 
 
+//@desc User login success (using passport.js)
+//@route GET /login/success
+//@access Public
+const loginSuccess = async(req, res) => {
+    const { user, cookies } = req
+    
+    //create token
+    const token = createToken(user._id)
+
+    if (req.user) {
+    res.status(400).json({
+            success: true,
+            message: "successful",
+            user,
+            token,
+            cookies
+        })
+    }
+}
+
+
+//@desc User login failed (using passport.js)
+//@route GET /login/failed
+//@access Public
+const loginFailed = async(req, res) => {
+    res.status(400).json({
+        success: false,
+        message: "failure"
+    })
+}
+
+
+
 module.exports = {
     signupUser,
     loginUser,
     forgotPassword,
     getResetPassword,
-    resetPassword
+    resetPassword,
+    loginSuccess,
+    loginFailed
 }

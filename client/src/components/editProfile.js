@@ -167,20 +167,17 @@ const EditProfile = ({recordId}) => {
                                                     className={inputStyle}/>
                                             </div>
 
-                                            <div className='flex justify-between mt-2 md:mt-auto'>
-                                                <div>
-                                                    <input type='submit' value="Save" className='md:mt-2 font-semibold bg-blue-700 hover:bg-blue-600 px-8 md:px-11 md:
-                                                    py-1 text-white' />
-                                                </div>
-                                                <div>
-                                                    <button className='md:mt-2 font-semibold bg-orange-600 hover:bg-orange-500 px-7 md:px-10 md:py-1 text-white'
-                                                        onClick={() => setShowModal(false)}>
-                                                        Cancel
-                                                    </button>
-                                                </div>
+                                            <div className={error? 'flex justify-between my-2' : 'flex justify-between mt-2'}>
+                                                <input type='submit' value="Save" className='md:mt-2 font-semibold bg-blue-700 hover:bg-blue-600 px-8 md:px-11 md:
+                                                py-1 text-white' />
+
+                                                <button className='md:mt-2 font-semibold bg-orange-600 hover:bg-orange-500 px-7 md:px-10 md:py-1 text-white'
+                                                    onClick={() => setShowModal(false)}>
+                                                    Cancel
+                                                </button>
                                             </div>
                                             
-                                            {error && <div className='rounded-md font-semibold py-1 px-2 bg-orange-50 border-[1.4px] border-red-500 text-red-700 mt-1'>{error}</div>}
+                                            {error && <div className='rounded-md py-1 px-2 bg-orange-50 border-[1.4px] border-red-500 text-red-700 mt-1'>{error}</div>}
                                         </form>
                                     </div> 
                                 </div>

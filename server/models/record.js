@@ -25,7 +25,7 @@ const studyRecordSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    //ASSIGNING RECORDS TO USERS
+    //AUTHORIZATION: ASSIGNING RECORDS TO USERS 
     user_id: {
         type: String,
         required: true

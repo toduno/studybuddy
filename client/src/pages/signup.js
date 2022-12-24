@@ -356,7 +356,6 @@ const Signup = () => {
   
                                     <div className='flex justify-between'>
                                             <input type='submit' value="Create account" disabled={isLoading}
-                                            ffffff
                                              className='md:mt-2 font-semibold bg-blue-700 hover:bg-blue-600 px-4 md:px-8 py-2 text-white' />
                                             <Link className='md:mt-2 font-semibold bg-orange-600 hover:bg-orange-500 px-12 md:px-16 py-2 text-white'
                                                 to='/'>
@@ -369,7 +368,7 @@ const Signup = () => {
                                         <Link  to='/login' className='font-semibold ml-2 text-blue-700 hover:text-blue-500 visited:text-purple-700 active:text-red-700'>Login</Link>
                                     </div>
   
-                                    {error && <div className='rounded-md font-semibold py-1 px-2 bg-orange-50 border-[1.4px] border-red-500 text-red-700 '>{error}</div>}
+                                    {error && <div className='rounded-md py-1 px-2 bg-orange-50 border-[1.4px] border-red-500 text-red-700 '>{error}</div>}
                                  </form>
                             </div> 
                         </div>

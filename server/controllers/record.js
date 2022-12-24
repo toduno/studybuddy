@@ -3,7 +3,7 @@ const studyRecordModel = require('../models/record')
 
 const getRecords = async(req, res) => {
     try{
-        //ASSIGNING RECORDS TO USERS
+        //AUTHORIZATION: ASSIGNING RECORDS TO USERS
         const user_id = req.user._id  //getting the user id from the user property that was attached to
         //the request object in the requireAuth middleware function for protected routes passed to these 
         //record routes
@@ -29,9 +29,15 @@ const createRecord =  async(req, res) => {
     const { type, subject, topic, duration, notes } = req.body
     
     try{
-        //ASSIGNING RECORDS TO USERS
+        //validation
+        if (!type || !subject || !topic || !duration || !notes) {
+            throw Error('All fields must be filled!')
+        }
+
+        //AUTHORIZATION: ASSIGNING RECORDS TO USERS
         const user_id = req.user._id 
        
+        //create new
         const newRecord = studyRecordModel.create({
             type,
             subject,
@@ -43,14 +49,22 @@ const createRecord =  async(req, res) => {
         
         res.status(201).json(newRecord)
 
-    } catch(err) {
-        res.status(400).json('Error: ' + err)
+    } catch(error) {
+        res.status(400).json({error: error.message})
     }
 }
 
 const updateRecord = async(req, res) => {
+    const { type, subject, topic, duration, notes } = req.body
     console.log(req.body)
+
     try{
+        //validation
+        if (!type || !subject || !topic || !duration || !notes) {
+            throw Error('All fields must be filled!')
+        }
+
+        //check if record exists and update
         const body = {
             ...req.body
         }
@@ -67,8 +81,8 @@ const deleteRecord = async(req, res) => {
     try{
         const deleteRecord = await studyRecordModel.findByIdAndDelete(req.params.id)
         res.status(200).json(deleteRecord)
-    } catch(err) {
-        res.status(400).json('Error: ' + err)
+    } catch(error) {
+        res.status(400).json({error: error.message})
     }
 }
 

@@ -9,6 +9,7 @@ import Login from "./pages/login";
 import Signup from "./pages/signup";
 import Profile from "./pages/profile";
 import ForgotPassword from "./pages/forgotPassword";
+import ResetPassword from "./pages/resetPassword";
 
 import { useAuthContext } from "./hooks/useAuthContext";
 
@@ -30,6 +31,7 @@ const App = () => {
           <Route path="/u/:id" element={user ? <Profile /> : <Navigate to='/login' />} />
 
           <Route path="/forgotPassword" element={<ForgotPassword />} />
+          <Route path="/resetPassword/:id/:token" element={<ResetPassword />} />
         </Routes>
       </div>
       

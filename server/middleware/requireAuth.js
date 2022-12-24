@@ -11,7 +11,7 @@ const User = require('../models/user')
 
 const requireAuth = async (req, res, next) => {
 
-    //VERIFY AUTHENTICATION
+    //VERIFY AUTHENTICATION FOR AUTHORIZATION
 
     //a. grab one of the headers property i.e authorization from the headers (which should contain the jwt),
     //so when sending requests here (having the authorization property) it'll be for the token
