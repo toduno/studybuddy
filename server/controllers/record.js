@@ -59,10 +59,10 @@ const updateRecord = async(req, res) => {
     console.log(req.body)
 
     try{
-        //validation
-        if (!type || !subject || !topic || !duration || !notes) {
-            throw Error('All fields must be filled!')
-        }
+        // //validation
+        // if (!type || !subject || !topic || !duration || !notes) {
+        //     throw Error('All fields must be filled!')
+        // }
 
         //check if record exists and update
         const body = {
