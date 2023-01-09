@@ -1,6 +1,6 @@
 import{ useState } from 'react';
 import { Link } from 'react-router-dom'
-import { FaFacebookF, FaGoogle, FaGithub } from 'react-icons/fa';
+// import { FaFacebookF, FaGoogle, FaGithub } from 'react-icons/fa';
 import { useLogin } from '../hooks/useLogin';
 
 
@@ -13,10 +13,10 @@ const Login = () => {
     const { login, error, isLoading } = useLogin() 
 
 
-    //google oauth2.0 sign in using passport
-    const google = () => {
-       return  window.open("http://localhost:7001/auth/google/", "_self")
-    }
+    // //google oauth2.0 sign in using passport
+    // const google = () => {
+    //    return  window.open("http://localhost:7001/auth/google/", "_self")
+    // }
 
     async function onSubmit(e) {
         e.preventDefault()
@@ -39,12 +39,12 @@ const Login = () => {
                             <div className='w-full px-4 md:px-5 pb-2 pt-3 md:pt-1 text-orange-900'>
                                 <div className='self-start mb-4'>
                                     <h3 className='font-bold text-2xl md:text-3xl md:mt-3'>Log In</h3>
-                                    <div className='flex items-center justify-center my-6 gap-x-7'>
+                                    {/* <div className='flex items-center justify-center my-6 gap-x-7'>
                                         <span className='bg-black hover:bg-gray-700 p-3 rounded-full'><FaGithub className='text-center text-white' /></span>
                                         <span  className='bg-red-700 hover:bg-red-600 p-3 rounded-full'><FaGoogle onClick={google} className='text-center text-white' /></span>
                                         <span className='bg-blue-700 hover:bg-blue-600 p-3 rounded-full'><FaFacebookF className='text-center text-white' /></span>
                                     </div>
-                                    <div className='border-b-[1px] w-full leading-[0.25em] text-center mb-0 mx-0'><span className='bg-white py-0 px-4'>or</span></div>
+                                    <div className='border-b-[1px] w-full leading-[0.25em] text-center mb-0 mx-0'><span className='bg-white py-0 px-4'>or</span></div> */}
                                 </div>
 
                                 <form onSubmit={onSubmit} className='w-full flex flex-col gap-y-3'>

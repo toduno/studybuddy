@@ -185,36 +185,37 @@ const resetPassword = async(req, res) => {
 }
 
 
-//@desc User login success (using passport.js)
-//@route GET /login/success
-//@access Public
-const loginSuccess = async(req, res) => {
-    const { user, cookies } = req
+// //passport auth
+// //@desc User login success (using passport.js)
+// //@route GET /login/success
+// //@access Public
+// const loginSuccess = async(req, res) => {
+//     const { user, cookies } = req
     
-    //create token
-    const token = createToken(user._id)
+//     //create token
+//     const token = createToken(user._id)
 
-    if (req.user) {
-    res.status(400).json({
-            success: true,
-            message: "successful",
-            user,
-            token,
-            cookies
-        })
-    }
-}
+//     if (req.user) {
+//     res.status(400).json({
+//             success: true,
+//             message: "successful",
+//             user,
+//             token,
+//             cookies
+//         })
+//     }
+// }
 
 
-//@desc User login failed (using passport.js)
-//@route GET /login/failed
-//@access Public
-const loginFailed = async(req, res) => {
-    res.status(400).json({
-        success: false,
-        message: "failure"
-    })
-}
+// //@desc User login failed (using passport.js)
+// //@route GET /login/failed
+// //@access Public
+// const loginFailed = async(req, res) => {
+//     res.status(400).json({
+//         success: false,
+//         message: "failure"
+//     })
+// }
 
 
 
@@ -224,6 +225,6 @@ module.exports = {
     forgotPassword,
     getResetPassword,
     resetPassword,
-    loginSuccess,
-    loginFailed
+    // loginSuccess,
+    // loginFailed
 }

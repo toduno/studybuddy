@@ -5,9 +5,10 @@ const mongoose = require('mongoose')
 const coookieSession = require("cookie-session"
 )
 const cors = require('cors')
-const cookieSession = require('cookie-session')
-const passport = require('passport')
-const passportSetup = require("./passport")
+////passport auth
+// const cookieSession = require('cookie-session')
+// const passport = require('passport')
+// const passportSetup = require("./passport")
 
 const corsOptions = {
     origin: 'http://localhost:3000',
@@ -21,15 +22,17 @@ const app = express()
 
 
 //middleware
-app.use(cookieSession(
-    {
-        name: "session",
-        keys: ["anyword"],
-        maxAge: 24 * 60 * 60 * 100
-    }
-))
-app.use(passport.initialize())
-app.use(passport.session())
+////passport auth
+// app.use(cookieSession(
+
+//     {
+//         name: "session",
+//         keys: ["anyword"],
+//         maxAge: 24 * 60 * 60 * 100
+//     }
+// ))
+// app.use(passport.initialize())
+// app.use(passport.session())
 
 app.use(cors(corsOptions))
 app.use(express.json())
